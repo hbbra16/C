@@ -1,0 +1,80 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+//declaring the struct as well as the typedef Ints to enable easier declaration
+//for rest of code
+
+typedef struct dynamicInts {
+    int value1;
+    int value2;
+}Ints;
+
+//our swap function, which will accept 2 pointers. Passing by reference allows the
+//addresses to be passed, and because of this, the values in these addresses to be
+//modified without passing values back and forth
+
+void swap(int *a, int *b)
+{
+    int temp;
+    temp=*a;
+    *a = *b;
+    *b = temp;
+}
+
+//our swapStructs function. magic happens. just kidding. but seriously. its magic.
+//2 pointers to our structs are passed here, or the addresses. within the function,
+//because we modify the values at the address location, we can modify the actual
+//value held there rather than a copy if we were to pass the values
+
+void swapStructs(Ints *firstInt, Ints *secondInt)
+{
+
+
+    Ints temp;
+    temp.value1 = firstInt->value1;
+    firstInt->value1 = firstInt->value2;
+    firstInt->value2 = temp.value1;
+
+}
+
+//the main function, where variables are declared, functions are called, and initial values are
+//established. we also print off our beginning values as well as values after passing
+//to the functions
+
+int main()
+{
+    //for ease of reading, this top part of the "swap" portion of the program
+    //first we declare variables and initial values
+    int val1, val2;
+    val1 = 1;
+    val2 = -1;
+    printf("Before the call val1 = %d and val2 = %d", val1, val2);
+    //pass values by reference aka by address
+    swap(&val1, &val2);
+    //magical value exchange has occurred. not really magic, because of pointers
+    //and the handiness of pointer bass by reference
+    printf("\nAfter the call val1 = %d and val2 = %d", val1, val2);
+
+    //following is all the swapStructs portion of the program
+    //first we declare 2 structs, which also could have been an array of structs, but
+    //i felt with just 2, it was just as easy to have 2 seperate structs
+    Ints firstInt, secondInt;
+    //assign values to our values...
+    firstInt.value1 = 10;
+    firstInt.value2 = 20;
+    secondInt.value1 = 30;
+    secondInt.value2 = 40;
+    //establish pointers to the structs
+    Ints *firstIntPtr = &firstInt;
+    Ints *secondIntPtr= &secondInt;
+    //show what the values are before the magical pass by reference call
+    printf("\nBefore swapStructs ptr1 contains %d and %d", firstIntPtr->value1, firstIntPtr->value2);
+    printf("\nBefore swapStructs ptr2 contains %d and %d", secondIntPtr->value1, secondIntPtr->value2);
+    //send off our pointers to structs to be modified within swapStructs function by reference
+    swapStructs(firstIntPtr, secondIntPtr);
+    //thanks to the amazingness of pass by reference, we now see that the values have been switched!
+    printf("\nAfter swapStructs ptr1 contains %d and %d", firstIntPtr->value1, firstIntPtr->value2);
+    printf("\nAfter swapStructs ptr2 contains %d and %d", secondIntPtr->value1, secondIntPtr->value2);
+    //we are done.
+    return 0;
+}
